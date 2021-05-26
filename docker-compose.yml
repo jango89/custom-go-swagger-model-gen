@@ -22,4 +22,4 @@ services:
         go install ./cmd/swagger/
 
         # generate models
-        go run ./cmd/swagger generate model -f /mapper/swagger2-fc.json
+        go run ./cmd/swagger generate model -f /mapper/swagger2-fc.json -t /mapper
