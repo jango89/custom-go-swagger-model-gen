@@ -1,0 +1,28 @@
+version: "3.3"
+services:
+  swagger-gen:
+    image: golang:1.14
+    # Bind the directory, so we have models generated being shared between container and source.
+    volumes:
+      - type: bind
+        source: ../
+        target: /mapper
+    command:
+      - /bin/bash
+      - -c
+      - |
+        rm -rf go-swagger /mapper/pkg/modelfc/*
+        git clone https://github.com/go-swagger/go-swagger ./go-swagger
+        cd go-swagger
+
+        # copy our custom swagger formats
+        cp /mapper/scripts/custom-swagger-formats.go ./generator/formats.go
+
+        #Install swagger code-gen
+        go install ./cmd/swagger/
+
+        # generate models
+        go run ./cmd/swagger generate model -f /mapper/api/swagger2-fc.json -t /mapper/pkg/modelfc -m modelfc
+
+        #cleanup folders
+        mv /mapper/pkg/modelfc/modelfc/* /mapper/pkg/modelfc/ && rmdir /mapper/pkg/modelfc/modelfc
