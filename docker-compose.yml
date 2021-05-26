@@ -11,18 +11,18 @@ services:
       - /bin/bash
       - -c
       - |
-        rm -rf go-swagger /mapper/pkg/modelfc/*
+        rm -rf go-swagger /mapper/modelfc/*
         git clone https://github.com/go-swagger/go-swagger ./go-swagger
         cd go-swagger
 
         # copy our custom swagger formats
-        cp /mapper/scripts/custom-swagger-formats.go ./generator/formats.go
+        cp /mapper/custom-swagger-formats.go ./generator/formats.go
 
         #Install swagger code-gen
         go install ./cmd/swagger/
 
         # generate models
-        go run ./cmd/swagger generate model -f /mapper/api/swagger2-fc.json -t /mapper/pkg/modelfc -m modelfc
+        go run ./cmd/swagger generate model -f /mapper/swagger2-fc.json -t /mapper/modelfc -m modelfc
 
         #cleanup folders
-        mv /mapper/pkg/modelfc/modelfc/* /mapper/pkg/modelfc/ && rmdir /mapper/pkg/modelfc/modelfc
+        mv /mapper/modelfc/modelfc/* /mapper/modelfc/ && rmdir /mapper/modelfc/modelfc
